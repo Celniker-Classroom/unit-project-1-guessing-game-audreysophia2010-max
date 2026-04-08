@@ -46,12 +46,12 @@ let answer = 0;
 let guessCount = 0;
 let totalWins = 0;
 let totalGuesses = 0;
-let topScores = [100, 100, 100]; 
+let topScores = []; 
 let currentRange = 3;
 const radios = document.getElementsByName("level");
 
 // Play button logic
-document.getElementById("playBtn").addEventListener("click", function(){
+document.getElementById("playBtn").addEventListener("click", function() {
     // Get range from selected radio
     for (let i = 0; i < radios.length; i++){
         if (radios[i].checked){
@@ -127,7 +127,7 @@ document.getElementById("guessBtn").addEventListener("click", function(){
 });
 
 // Give Up Button Logic
-document.getElementById("giveUpBtn").addEventListener("click", function(){
+document.getElementById("giveUpBtn").addEventListener("click", function() {
     document.getElementById("msg").textContent = "Game Over. The answer was " + answer + ".";
     document.getElementById("guess").value = "";
 
