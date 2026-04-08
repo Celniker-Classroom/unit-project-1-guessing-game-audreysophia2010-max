@@ -8,8 +8,6 @@ while (true) {
     alert("Please enter a name.")
 }
 
-alert("Welcome, " + playerName + "!");
-
 // Set up data variables
 var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 var today = new Date();
@@ -87,7 +85,6 @@ document.getElementById("guessBtn").addEventListener("click", function(){
     let userGuess = parseInt(document.getElementById("guess").value);
     document.getElementById("guess").value = "";
 
-
     if (isNaN(userGuess)) {
         document.getElementById("msg").textContent = "Please enter a valid number!";
         return;
@@ -102,16 +99,30 @@ document.getElementById("guessBtn").addEventListener("click", function(){
         } else {
             document.getElementById("msg").textContent = "Correct! It took you " + guessCount + " guesses.";
         }
-        
+    
         totalWins++;
         totalGuesses += guessCount;
         endRound();
+        return;
+    }
 
-    // Ask user to guess again
-    } else if (userGuess > answer) {
-        document.getElementById("msg").textContent = "Too high! Try again.";
+    // Give current guess a temperature based on proximity
+    let diff = Math.abs(userGuess - answer);
+    let temperature = "";
+
+    if (diff <= 2) {
+        temperature = "hot";
+    } else if (diff <= 5) {
+        temperature = "warm";
     } else {
-        document.getElementById("msg").textContent = "Too low! Try again.";
+        temperature = "cold";
+    }
+
+    // 3. Give hint: high/low with temperature
+    if (userGuess > answer) {
+        document.getElementById("msg").textContent = "Too high! You are " + temperature + ".";
+    } else {
+        document.getElementById("msg").textContent = "Too low! You are " + temperature + ".";
     }
 });
 
