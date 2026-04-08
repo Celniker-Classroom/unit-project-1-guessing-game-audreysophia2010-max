@@ -1,15 +1,36 @@
-// Get name
-var playerName = prompt("What is your name?");
-playerName = playerName[0].toUpperCase() + playerName.slice(1).toLowerCase();
+// Get name and capitalize correctly
+while (true) {
+    var playerName = prompt("What is your name?");
+    if (playerName != "") {
+        playerName = playerName[0].toUpperCase() + playerName.slice(1).toLowerCase();
+        break;
+    }
+    alert("Please enter a name.")
+}
+
 alert("Welcome, " + playerName + "!");
 
-// Print current date
+// Set up data variables
 var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 var today = new Date();
-
 var month = months[today.getMonth()];
 var day = today.getDate();
 var year = today.getFullYear();
+
+// Add ordinal suffix (1st, 2nd, 3rd, etc.)
+let j = day % 10;
+let k = day % 100;
+if (j == 1 && k != 11) {
+    day += "st";
+} else if (j == 2 && k != 12) {
+    day += "nd";
+} else if (j == 3 && k != 13) {
+    day += "rd";
+} else {
+    day += "th";
+}
+
+// Print current date at top of page
 document.getElementById("date").textContent = (month + " " + day + ", " + year);
 
 // Game state
