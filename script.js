@@ -30,20 +30,33 @@ if (j == 1 && k != 11) {
     day += "th";
 }
 
-// Print current date at top of page
-document.getElementById("date").textContent = (month + " " + day + ", " + year);
+// Game clock
+let startTime;          
+let totalTime = 0;
+let fastestTime = Infinity; 
+
+function updateLiveTime() {
+    let timeString = new Date().toLocaleTimeString(); 
+    document.getElementById("date").textContent = month + " " + day + ", " + year + " - " + timeString;
+}
+
+// Update the clock
+updateLiveTime();
+setInterval(updateLiveTime, 1000);
 
 // Game state
 let answer = 0;
 let guessCount = 0;
 let totalWins = 0;
 let totalGuesses = 0;
+
+// Guessing Range
 let currentRange = 3;
 const radios = document.getElementsByName("level");
 
 // Play button logic
 document.getElementById("playBtn").addEventListener("click", function(){
-    // Determine range from selected radio
+    // Get range from selected radio
     for (let i = 0; i < radios.length; i++){
         if (radios[i].checked){
             currentRange = parseInt(radios[i].value);
@@ -64,12 +77,17 @@ document.getElementById("playBtn").addEventListener("click", function(){
     for (let i = 0; i < radios.length; i++){
         radios[i].disabled = true;
     }
+
+    // Start game clock
+    startTime = new Date().getTime();
 });
 
 // Guess button logic
 document.getElementById("guessBtn").addEventListener("click", function(){
     let userGuess = parseInt(document.getElementById("guess").value);
-    
+    document.getElementById("guess").value = "";
+
+
     if (isNaN(userGuess)) {
         document.getElementById("msg").textContent = "Please enter a valid number!";
         return;
@@ -100,19 +118,41 @@ document.getElementById("guessBtn").addEventListener("click", function(){
 // Give Up Button Logic
 document.getElementById("giveUpBtn").addEventListener("click", function(){
     document.getElementById("msg").textContent = "Game Over. The answer was " + answer + ".";
-    
-    // Penalty: add the max range to total guesses
+    document.getElementById("guess").value = "";
+
+    // Update stats
     totalGuesses += currentRange;
+    totalWins++;
     endRound();
 });
 
-// Reset buttons after a win or giving up
 function endRound() {
+    // Calculate elapsed time
+    let endTime = new Date().getTime();
+    let elapsedSeconds = (endTime - startTime) / 1000; // Convert milliseconds to seconds
+    totalTime += elapsedSeconds;
+
+    if (elapsedSeconds < fastestTime) {
+        fastestTime = elapsedSeconds;
+    }
+
+    let averageTime = totalTime / totalWins;
+
+    // Reset button states
     document.getElementById("guessBtn").disabled = true;
     document.getElementById("giveUpBtn").disabled = true;
     document.getElementById("playBtn").disabled = false;
-
     for (let i = 0; i < radios.length; i++){
         radios[i].disabled = false;
     }
+
+    // Update win and guess stats
+    document.getElementById("wins").textContent = "Total wins: " + totalWins;
+    
+    let avgGuess = totalWins > 0 ? (totalGuesses / totalWins).toFixed(2) : 0;
+    document.getElementById("avgScore").textContent = "Average Score: " + avgGuess;
+
+    // Time stats
+    document.getElementById("fastest").textContent = "Fastest Game: " + fastestTime.toFixed(2) + " seconds";
+    document.getElementById("avgTime").textContent = "Average Time: " + averageTime.toFixed(2) + " seconds";
 }
