@@ -38,7 +38,6 @@ function updateLiveTime() {
     document.getElementById("date").textContent = month + " " + day + ", " + year + " - " + timeString;
 }
 
-// Update the clock
 updateLiveTime();
 setInterval(updateLiveTime, 1000);
 
@@ -47,8 +46,7 @@ let answer = 0;
 let guessCount = 0;
 let totalWins = 0;
 let totalGuesses = 0;
-
-// Guessing Range
+let topScores = [100, 100, 100]; 
 let currentRange = 3;
 const radios = document.getElementsByName("level");
 
@@ -102,11 +100,13 @@ document.getElementById("guessBtn").addEventListener("click", function(){
     
         totalWins++;
         totalGuesses += guessCount;
+        updateLeaderboard(guessCount); 
+
         endRound();
         return;
     }
 
-    // Give current guess a temperature based on proximity
+    // Wrong guess logic
     let diff = Math.abs(userGuess - answer);
     let temperature = "";
 
@@ -166,4 +166,20 @@ function endRound() {
     // Time stats
     document.getElementById("fastest").textContent = "Fastest Game: " + fastestTime.toFixed(2) + " seconds";
     document.getElementById("avgTime").textContent = "Average Time: " + averageTime.toFixed(2) + " seconds";
+}
+
+// Leaderboard logic
+function updateLeaderboard(score) {
+    topScores.push(score);
+    topScores.sort(function(a, b) {
+        return a - b;
+    });
+
+    topScores = topScores.slice(0, 3);
+
+    // Update leaderboard
+    let listItems = document.getElementsByName("leaderboard");
+    for (let i = 0; i < listItems.length; i++) {
+        listItems[i].textContent = topScores[i];
+    }
 }
