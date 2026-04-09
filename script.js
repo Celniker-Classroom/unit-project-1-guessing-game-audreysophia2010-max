@@ -84,7 +84,7 @@ document.getElementById("guessBtn").addEventListener("click", function(){
     document.getElementById("guess").value = "";
 
     if (isNaN(userGuess)) {
-        document.getElementById("msg").textContent = "Please enter a valid number!";
+        document.getElementById("msg").textContent = playerName + ", please enter a valid number!";
         return;
     }
 
@@ -93,9 +93,9 @@ document.getElementById("guessBtn").addEventListener("click", function(){
     // Win logic
     if (userGuess === answer) {
         if (guessCount === 1) {
-            document.getElementById("msg").textContent = "Correct! It took you 1 guess.";
+            document.getElementById("msg").textContent = "Correct! It took " + playerName + " 1 guess.";
         } else {
-            document.getElementById("msg").textContent = "Correct! It took you " + guessCount + " guesses.";
+            document.getElementById("msg").textContent = "Correct! It took " + playerName + " " + guessCount + " guesses.";
         }
     
         totalWins++;
@@ -120,20 +120,21 @@ document.getElementById("guessBtn").addEventListener("click", function(){
 
     // 3. Give hint: high/low with temperature
     if (userGuess > answer) {
-        document.getElementById("msg").textContent = "Too high! You are " + temperature + ".";
+        document.getElementById("msg").textContent = "Too high! " + playerName + " is " + temperature + ".";
     } else {
-        document.getElementById("msg").textContent = "Too low! You are " + temperature + ".";
+        document.getElementById("msg").textContent = "Too low! " + playerName + " is " + temperature + ".";
     }
 });
 
 // Give Up Button Logic
 document.getElementById("giveUpBtn").addEventListener("click", function() {
-    document.getElementById("msg").textContent = "Game Over. The answer was " + answer + ".";
+    document.getElementById("msg").textContent = playerName + " pressed Game Over. The answer was " + answer + ".";
     document.getElementById("guess").value = "";
 
     // Update stats
     totalGuesses += currentRange;
     totalWins++;
+    updateLeaderboard(currentRange);
     endRound();
 });
 
